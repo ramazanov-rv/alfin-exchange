@@ -21,7 +21,7 @@ import {
   getServiceRate,
   getServices,
 } from "../../services/service-payment";
-import { Service } from "../../services/service-payment/interface";
+import { Service, Tariff } from "../../services/service-payment/interface";
 import { useTelegram } from "../../hooks";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -32,6 +32,14 @@ interface MenuComponentProps {
   onClose: () => void;
   items: Service[];
   onSelect: (item: Service) => void;
+}
+
+interface TariffMenuComponentProps {
+  anchorEl: null | HTMLElement;
+  open: boolean;
+  onClose: () => void;
+  items: Tariff[];
+  onSelect: (item: Tariff) => void;
 }
 
 const priceSchema = yup.object().shape({
@@ -110,6 +118,75 @@ function MenuComponent({
   );
 }
 
+function TariffMenuComponent({
+  anchorEl,
+  open,
+  onClose,
+  items,
+  onSelect,
+}: TariffMenuComponentProps) {
+  const isDark = Telegram.WebApp.colorScheme === "dark";
+
+  return (
+    <Menu
+      id="tariff-menu"
+      anchorEl={anchorEl}
+      open={open}
+      onClose={onClose}
+      MenuListProps={{
+        sx: {
+          backgroundColor: "secondary.main",
+          paddingBlock: "0 !important",
+          maxHeight: "200px",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "transparent",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: isDark ? "#3C3C3F" : "#EFEFF3",
+            borderRadius: "2px",
+          },
+        },
+      }}
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: "16px",
+            margin: "0",
+            maxHeight: "200px",
+          },
+        },
+      }}
+      anchorOrigin={{ vertical: "center", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "left" }}
+    >
+      {items.map((item, index) => (
+        <Box key={item.id}>
+          <MenuItem
+            sx={{ paddingBlock: "0", marginBlock: "0" }}
+            onClick={() => onSelect(item)}
+          >
+            <Typography>
+              {item.name}: {item.price_rub}₽
+            </Typography>
+          </MenuItem>
+          {index < items.length - 1 && (
+            <Divider
+              sx={{
+                margin: "0 !important",
+                borderColor: `${isDark ? "#3C3C3F" : "#EFEFF3"}`,
+              }}
+            />
+          )}
+        </Box>
+      ))}
+    </Menu>
+  );
+}
+
 interface LocationState {
   selectedService?: string;
   amount?: number;
@@ -124,8 +201,10 @@ export function ServicePaymentPage() {
   const { setIsNavigationVisible } = useNavigation();
   const { enqueueSnackbar } = useSnackbar();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tariffAnchorEl, setTariffAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedSubscription, setSelectedSubscription] =
     useState<Service | null>(null);
+  const [selectedTariff, setSelectedTariff] = useState<Tariff | null>(null);
   const [subscriptionPrice, setSubscriptionPrice] = useState<string>("");
   const [customServiceName, setCustomServiceName] = useState<string>("");
   const [paymentLink, setPaymentLink] = useState<string>("");
@@ -137,12 +216,19 @@ export function ServicePaymentPage() {
   const { data: services, isLoading } = useQuery("services", getServices);
   const { data: serviceRate } = useQuery("services-rate", getServiceRate);
 
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-  const userData = {
-    first_name: userInfo.first_name,
-    last_name: userInfo.last_name,
-    phone: userInfo.phone_number,
-  };
+  // Безопасный парсинг userInfo из localStorage
+  const userInfo = useMemo(() => {
+    try {
+      const stored = localStorage.getItem("userInfo");
+      if (!stored || stored === "undefined" || stored === "null") {
+        return {};
+      }
+      return JSON.parse(stored);
+    } catch (error) {
+      console.error("Error parsing userInfo from localStorage:", error);
+      return {};
+    }
+  }, []);
 
   // Handle initial state from transaction repeat
   useEffect(() => {
@@ -159,13 +245,31 @@ export function ServicePaymentPage() {
     }
   }, [state, services]);
 
+  // Обновляем цену в долларах при изменении курса, если выбран тариф
+  useEffect(() => {
+    if (selectedTariff && serviceRate?.show_rate) {
+      const priceInRub = parseFloat(selectedTariff.price_rub);
+      if (!isNaN(priceInRub)) {
+        const priceInUsd = priceInRub / serviceRate.show_rate;
+        setSubscriptionPrice(priceInUsd.toFixed(2));
+        setPriceError("");
+      }
+    }
+  }, [selectedTariff, serviceRate?.show_rate]);
+
   // Вычисляем итоговую сумму в рублях
   const totalAmountInRubles = useMemo(() => {
+    // Если выбран тариф, используем его цену в рублях
+    if (selectedTariff) {
+      const priceInRub = parseFloat(selectedTariff.price_rub);
+      return isNaN(priceInRub) ? 0 : priceInRub;
+    }
+    // Иначе вычисляем из долларов
     if (!serviceRate?.show_rate || !subscriptionPrice) return 0;
     const priceInUsd = parseFloat(subscriptionPrice);
     if (isNaN(priceInUsd)) return 0;
     return priceInUsd * serviceRate.show_rate;
-  }, [subscriptionPrice, serviceRate?.show_rate]);
+  }, [selectedTariff, subscriptionPrice, serviceRate?.show_rate]);
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -177,10 +281,32 @@ export function ServicePaymentPage() {
 
   const handleSelection = (item: Service) => {
     setSelectedSubscription(item);
+    setSelectedTariff(null);
+    setSubscriptionPrice("");
+    setPriceError("");
     if (item.name !== "Другой сервис") {
       setCustomServiceName("");
     }
     handleMenuClose();
+  };
+
+  const handleTariffMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setTariffAnchorEl(event.currentTarget);
+  };
+
+  const handleTariffMenuClose = () => {
+    setTariffAnchorEl(null);
+  };
+
+  const handleTariffSelection = (tariff: Tariff) => {
+    setSelectedTariff(tariff);
+    const priceInRub = parseFloat(tariff.price_rub);
+    if (serviceRate?.show_rate && !isNaN(priceInRub)) {
+      const priceInUsd = priceInRub / serviceRate.show_rate;
+      setSubscriptionPrice(priceInUsd.toFixed(2));
+      setPriceError("");
+    }
+    handleTariffMenuClose();
   };
 
   const validatePrice = async (price: string) => {
@@ -243,19 +369,36 @@ export function ServicePaymentPage() {
       return;
     }
 
-    const isValid = await validatePrice(subscriptionPrice);
-    if (isValid) {
-      createPaymentMutation({
-        service_name:
-          selectedSubscription?.name === "Другой сервис"
-            ? customServiceName.trim()
-            : selectedSubscription?.name || "",
-        amount_usd: parseFloat(subscriptionPrice),
-        amount_rub: totalAmountInRubles,
-        exchange_rate: serviceRate?.show_rate ?? 0,
-        payment_link: paymentLink || "",
+    // Если есть тарифы у сервиса, проверяем что тариф выбран
+    if (
+      selectedSubscription?.tariffs &&
+      selectedSubscription.tariffs.length > 0 &&
+      !selectedTariff
+    ) {
+      enqueueSnackbar("Выберите тариф", {
+        variant: "error",
       });
+      return;
     }
+
+    // Валидация цены нужна только если тариф не выбран
+    if (!selectedTariff) {
+      const isValid = await validatePrice(subscriptionPrice);
+      if (!isValid) {
+        return;
+      }
+    }
+
+    createPaymentMutation({
+      service_name:
+        selectedSubscription?.name === "Другой сервис"
+          ? customServiceName.trim()
+          : selectedSubscription?.name || "",
+      amount_usd: parseFloat(subscriptionPrice) || 0,
+      amount_rub: totalAmountInRubles,
+      exchange_rate: serviceRate?.show_rate ?? 0,
+      payment_link: paymentLink || "",
+    });
   };
 
   const handlePriceFieldFocus = () => {
@@ -314,7 +457,7 @@ export function ServicePaymentPage() {
               alignItems: "flex-end",
             }}
           >
-            <Typography>Выберите подписку</Typography>
+            <Typography>Выберите сервис</Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography
                 sx={{
@@ -332,6 +475,39 @@ export function ServicePaymentPage() {
             </Box>
           </Box>
           <Divider sx={{ margin: "12px 0px" }} />
+
+          {/* Tariff Selection */}
+          {selectedSubscription &&
+            selectedSubscription.tariffs &&
+            selectedSubscription.tariffs.length > 0 && (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <Typography>Тариф</Typography>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography
+                      sx={{
+                        color: "primary.main",
+                        cursor: "pointer",
+                        paddingRight: "3px",
+                      }}
+                      onClick={handleTariffMenuOpen}
+                    >
+                      {selectedTariff
+                        ? `${selectedTariff.name}: ${selectedTariff.price_rub}₽`
+                        : "Выберите тариф"}
+                    </Typography>
+                    <SelectArrowsIcon />
+                  </Box>
+                </Box>
+                <Divider sx={{ margin: "12px 0px" }} />
+              </>
+            )}
 
           {/* Custom Service Name Input */}
           {selectedSubscription?.name === "Другой сервис" && (
@@ -402,53 +578,57 @@ export function ServicePaymentPage() {
           )}
 
           {/* Price Input */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-            }}
-          >
-            <Box>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
-                Стоимость подписки
-              </Typography>
-              {priceError && (isPriceFieldTouched || isFormSubmitted) && (
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    color: "error.main",
-                    mt: 0.5,
-                  }}
-                >
-                  {priceError}
-                </Typography>
-              )}
-            </Box>
-            <TextField
-              placeholder="Введите сумму"
-              value={subscriptionPrice}
-              onChange={handlePriceChange}
-              onFocus={(e) => {
-                handlePriceFieldFocus();
-                handleInputFocus();
-              }}
-              onBlur={handleInputBlur}
-              error={!!priceError && (isPriceFieldTouched || isFormSubmitted)}
+          {(!selectedSubscription ||
+            !selectedSubscription.tariffs ||
+            selectedSubscription.tariffs.length === 0) && (
+            <Box
               sx={{
-                width: "49%",
-                input: {
-                  paddingBlock: "0px",
-                  paddingLeft: "10px",
-                  textAlign: "right",
-                },
-                "& fieldset": { border: "none" },
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
               }}
-              InputProps={{
-                endAdornment: <Typography sx={{ ml: 0.5 }}>$</Typography>,
-              }}
-            />
-          </Box>
+            >
+              <Box>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
+                  Стоимость подписки
+                </Typography>
+                {priceError && (isPriceFieldTouched || isFormSubmitted) && (
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      color: "error.main",
+                      mt: 0.5,
+                    }}
+                  >
+                    {priceError}
+                  </Typography>
+                )}
+              </Box>
+              <TextField
+                placeholder="Введите сумму"
+                value={subscriptionPrice}
+                onChange={handlePriceChange}
+                onFocus={(e) => {
+                  handlePriceFieldFocus();
+                  handleInputFocus();
+                }}
+                onBlur={handleInputBlur}
+                error={!!priceError && (isPriceFieldTouched || isFormSubmitted)}
+                sx={{
+                  width: "49%",
+                  input: {
+                    paddingBlock: "0px",
+                    paddingLeft: "10px",
+                    textAlign: "right",
+                  },
+                  "& fieldset": { border: "none" },
+                }}
+                InputProps={{
+                  endAdornment: <Typography sx={{ ml: 0.5 }}>$</Typography>,
+                }}
+              />
+            </Box>
+          )}
         </Box>
       </Block>
 
@@ -472,8 +652,11 @@ export function ServicePaymentPage() {
             onClick={handleSubmit}
             disabled={
               !selectedSubscription ||
-              !subscriptionPrice ||
-              !!priceError ||
+              (selectedSubscription.tariffs &&
+                selectedSubscription.tariffs.length > 0 &&
+                !selectedTariff) ||
+              (!selectedTariff &&
+                (!subscriptionPrice || !!priceError)) ||
               isCreatingPayment
             }
           >
@@ -495,6 +678,18 @@ export function ServicePaymentPage() {
           onSelect={handleSelection}
         />
       )}
+
+      {selectedSubscription &&
+        selectedSubscription.tariffs &&
+        selectedSubscription.tariffs.length > 0 && (
+          <TariffMenuComponent
+            anchorEl={tariffAnchorEl}
+            open={Boolean(tariffAnchorEl)}
+            onClose={handleTariffMenuClose}
+            items={selectedSubscription.tariffs}
+            onSelect={handleTariffSelection}
+          />
+        )}
     </Box>
   );
 }

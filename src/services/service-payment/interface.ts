@@ -1,7 +1,14 @@
+export interface Tariff {
+  id: number;
+  name: string;
+  price_rub: string;
+}
+
 export interface Service {
   id: number;
   name: string;
   supports_link_payment: boolean;
+  tariffs: Tariff[];
 }
 
 
