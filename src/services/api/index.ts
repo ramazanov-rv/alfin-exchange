@@ -25,3 +25,17 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 503) {
+      if (window.location.pathname !== "/maintenance") {
+        window.location.href = "/maintenance";
+      }
+    }
+    return Promise.reject(error);
+  }
+);

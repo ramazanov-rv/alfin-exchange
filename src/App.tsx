@@ -18,6 +18,7 @@ import {
   WithdrawlPage,
   ForeignCardChoosePage,
   ForeignCardApplyFormPage,
+  MaintenancePage,
 } from "./pages";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         { path: "/success-payment", element: <SuccessPaymentPage /> },
         { path: "/foreign-card", element: <ForeignCardChoosePage /> },
         { path: "/foreign-card/apply", element: <ForeignCardApplyFormPage /> },
+        { path: "/maintenance", element: <MaintenancePage /> },
       ],
     },
   ]);

@@ -67,6 +67,12 @@ export function Navigation() {
     ? "calc(env(safe-area-inset-bottom) + 20px)"
     : "20px";
 
+  const isMaintenancePage = location.pathname === "/maintenance";
+
+  if (isMaintenancePage) {
+    return null;
+  }
+
   return (
     <>
       {/* Bottom gradient overlay */}

@@ -15,3 +15,4 @@ export * from "./about";
 export * from "./success-payment";
 export * from "./foreign-card/choose";
 export * from "./foreign-card/apply";
+export * from "./maintenance";

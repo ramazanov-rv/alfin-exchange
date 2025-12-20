@@ -14,7 +14,11 @@ import { AxiosError } from "axios";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      onError() {
+      onError(error: unknown) {
+        const axiosError = error as AxiosError<{ detail: string }>;
+        if (axiosError?.response?.status === 503) {
+          return;
+        }
         enqueueSnackbar("Что-то пошло не так, попробуйте позже", {
           variant: "error",
         });
@@ -23,6 +27,9 @@ const queryClient = new QueryClient({
     mutations: {
       onError(error: unknown) {
         const axiosError = error as AxiosError<{ detail: string }>;
+        if (axiosError?.response?.status === 503) {
+          return;
+        }
         if (axiosError?.response?.status === 422) {
           enqueueSnackbar(axiosError.response.data.detail, {
             variant: "error",
