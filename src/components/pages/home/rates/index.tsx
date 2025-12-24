@@ -12,7 +12,9 @@ export function RatesBlock() {
     queryFn: () => getRates(),
   });
 
-  const rates = Array.isArray(data) ? data : [];
+  const rates = Array.isArray(data)
+    ? data.filter((rate) => rate.rate != null && !isNaN(rate.rate))
+    : [];
 
   return (
     <Block

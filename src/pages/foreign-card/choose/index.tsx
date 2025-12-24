@@ -153,7 +153,7 @@ export function ForeignCardChoosePage() {
                     lineHeight: "100%",
                   }}
                 >
-                  Мультивселенная
+                  Мультивалютная
                 </Typography>
               </Box>
 

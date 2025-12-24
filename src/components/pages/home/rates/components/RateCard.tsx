@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 
 interface RateCard {
   title: string;
-  rate: number;
+  rate?: number | null;
   icon: string;
   symbol: string;
 }
@@ -34,8 +34,14 @@ export function RateCard({ title, rate, icon, symbol }: RateCard) {
         </Typography>
       )}
       <Typography sx={{ fontWeight: "500" }}>
-        {title} • {rate}
-        {symbol === "RUB" ? "₮" : "₽"}
+        {title}
+        {rate != null ? (
+          <>
+            {" • "}
+            {rate}
+            {symbol === "RUB" ? "₮" : "₽"}
+          </>
+        ) : null}
       </Typography>
     </Box>
   );
