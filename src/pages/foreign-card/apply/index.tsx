@@ -48,7 +48,7 @@ export function ForeignCardApplyFormPage() {
   const { tg } = useTelegram();
   const { state } = useLocation();
   const { card } = state;
-  const title = card === "ibt-card" ? "IBT Bank" : "Альфа банк Беларусь";
+  const title = (card === "kz-card" && "Freedom Казахстан") || "";
   const { enqueueSnackbar } = useSnackbar();
   const isIbtCard = card === "ibt-card";
 
@@ -122,7 +122,7 @@ export function ForeignCardApplyFormPage() {
       phone_number: formData.phone,
       email: formData.email,
       delivery_address: formData.delivery_address || "",
-      card_type_id: card === "ibt-card" ? 1 : 2,
+      card_type_id: 3,
     });
   };
 

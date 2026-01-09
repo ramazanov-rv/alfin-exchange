@@ -297,7 +297,7 @@ export function ForeignCardChoosePage() {
               <Button
                 onClick={() =>
                   navigate("/foreign-card/apply", {
-                    state: { card: "ibt-card" },
+                    state: { card: "kz-card" },
                   })
                 }
               >
