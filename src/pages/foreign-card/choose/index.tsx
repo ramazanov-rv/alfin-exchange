@@ -62,7 +62,7 @@ export function ForeignCardChoosePage() {
             {/* Image */}
             <Box
               component="img"
-              src="/ibt-card.png"
+              src="/ffcard.png"
               sx={{
                 width: "100%",
                 height: "auto",
@@ -93,7 +93,7 @@ export function ForeignCardChoosePage() {
                   color: "text.primary",
                 }}
               >
-                {cardsData?.cards[0].name}
+                Freedom Казахстан
               </Typography>
               <Typography
                 sx={{
@@ -105,7 +105,7 @@ export function ForeignCardChoosePage() {
                   color: "text.primary",
                 }}
               >
-                Таджикистан
+                Казахстан
               </Typography>
             </Box>
 
@@ -192,7 +192,7 @@ export function ForeignCardChoosePage() {
                     lineHeight: "100%",
                   }}
                 >
-                  Можно пополнять
+                  Привязывается к Apple Pay и Google Pay
                 </Typography>
               </Box>
 
@@ -231,7 +231,7 @@ export function ForeignCardChoosePage() {
                     lineHeight: "100%",
                   }}
                 >
-                  Работает в Европе
+                  Срок действия: 5 лет
                 </Typography>
               </Box>
             </Box>
@@ -249,9 +249,7 @@ export function ForeignCardChoosePage() {
                     color: "text.primary",
                   }}
                 >
-                  {formatNumber(
-                    (cardsData?.cards[0]?.final_price || 0).toString()
-                  )}
+                  15 000
                   ₽
                 </Typography>
                 <Typography
@@ -277,7 +275,7 @@ export function ForeignCardChoosePage() {
                     color: "text.primary",
                   }}
                 >
-                  {cardsData?.cards[0].issue_days}
+                  1-3 рабочих дня
                 </Typography>
                 <Typography
                   sx={{
@@ -300,265 +298,6 @@ export function ForeignCardChoosePage() {
                 onClick={() =>
                   navigate("/foreign-card/apply", {
                     state: { card: "ibt-card" },
-                  })
-                }
-              >
-                Оформить заявку
-              </Button>
-            </Box>
-          </Box>
-
-          {/* Second card */}
-          <Box
-            sx={{
-              bgcolor: "secondary.main",
-              borderRadius: "16px",
-              padding: "16px",
-            }}
-          >
-            {/* Image */}
-            <Box
-              component="img"
-              src="/alfa-card.png"
-              sx={{
-                width: "100%",
-                height: "auto",
-                objectFit: "cover",
-                borderRadius: "8px",
-                boxShadow:
-                  "0px 10px 20px 0px #00000026, inset 0px -1px 0px 0px #00000040, inset 0px 1px 0px 0px #FFFFFF0D",
-              }}
-            />
-
-            {/* Content */}
-
-            {/* Card name */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "4px",
-                mt: 2.5,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 24,
-                  fontWeight: 600,
-                  lineHeight: "100%",
-                  letterSpacing: "-1px",
-                  color: "text.primary",
-                }}
-              >
-                {cardsData?.cards[1].name}
-              </Typography>
-              <Typography
-                sx={{
-                  opacity: 0.5,
-                  fontSize: 14,
-                  fontWeight: 400,
-                  lineHeight: "100%",
-                  letterSpacing: "-0.5px",
-                  color: "text.primary",
-                }}
-              >
-                Беларусь
-              </Typography>
-            </Box>
-
-            {/* Card Advantages */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "14px",
-                marginBlock: 3,
-              }}
-            >
-              {/* First item */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: "11px" }}>
-                {/* Icon */}
-                <Box
-                  sx={{
-                    backgroundColor: "secondary.light",
-                    borderRadius: "50%",
-                    width: "32px",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="14"
-                    viewBox="0 0 20 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M2.83398 0.333008H17.1673C17.6978 0.333008 18.2065 0.543722 18.5815 0.918794C18.9566 1.29387 19.1673 1.80257 19.1673 2.33301V11.6663C19.1673 12.1968 18.9566 12.7055 18.5815 13.0806C18.2065 13.4556 17.6978 13.6663 17.1673 13.6663H2.83398C2.30355 13.6663 1.79484 13.4556 1.41977 13.0806C1.0447 12.7055 0.833984 12.1968 0.833984 11.6663V2.33301C0.833984 1.80257 1.0447 1.29387 1.41977 0.918794C1.79484 0.543722 2.30355 0.333008 2.83398 0.333008ZM3.33398 4.49967C3.33398 4.27866 3.42178 4.0667 3.57806 3.91042C3.73434 3.75414 3.9463 3.66634 4.16732 3.66634H8.33398C8.555 3.66634 8.76696 3.75414 8.92324 3.91042C9.07952 4.0667 9.16732 4.27866 9.16732 4.49967C9.16732 4.72069 9.07952 4.93265 8.92324 5.08893C8.76696 5.24521 8.555 5.33301 8.33398 5.33301H4.16732C3.9463 5.33301 3.73434 5.24521 3.57806 5.08893C3.42178 4.93265 3.33398 4.72069 3.33398 4.49967ZM4.16732 6.16634C3.9463 6.16634 3.73434 6.25414 3.57806 6.41042C3.42178 6.5667 3.33398 6.77866 3.33398 6.99967C3.33398 7.22069 3.42178 7.43265 3.57806 7.58893C3.73434 7.74521 3.9463 7.83301 4.16732 7.83301H8.33398C8.555 7.83301 8.76696 7.74521 8.92324 7.58893C9.07952 7.43265 9.16732 7.22069 9.16732 6.99967C9.16732 6.77866 9.07952 6.5667 8.92324 6.41042C8.76696 6.25414 8.555 6.16634 8.33398 6.16634H4.16732ZM4.16732 8.66634C3.9463 8.66634 3.73434 8.75414 3.57806 8.91042C3.42178 9.0667 3.33398 9.27866 3.33398 9.49967C3.33398 9.72069 3.42178 9.93265 3.57806 10.0889C3.73434 10.2452 3.9463 10.333 4.16732 10.333H8.33398C8.555 10.333 8.76696 10.2452 8.92324 10.0889C9.07952 9.93265 9.16732 9.72069 9.16732 9.49967C9.16732 9.27866 9.07952 9.0667 8.92324 8.91042C8.76696 8.75414 8.555 8.66634 8.33398 8.66634H4.16732ZM13.0898 9.25551L16.4232 5.92217C16.575 5.76501 16.6589 5.5545 16.657 5.33601C16.6551 5.11751 16.5675 4.9085 16.413 4.75399C16.2585 4.59949 16.0495 4.51185 15.831 4.50995C15.6125 4.50805 15.402 4.59204 15.2448 4.74384L12.5007 7.48801L11.4232 6.41051C11.266 6.25871 11.0555 6.17471 10.837 6.17661C10.6185 6.17851 10.4095 6.26615 10.255 6.42066C10.1005 6.57517 10.0128 6.78418 10.0109 7.00267C10.009 7.22117 10.093 7.43167 10.2448 7.58884L11.9115 9.25551C12.0678 9.41173 12.2797 9.4995 12.5007 9.4995C12.7216 9.4995 12.9335 9.41173 13.0898 9.25551Z"
-                      fill="#3377FF"
-                    />
-                  </svg>
-                </Box>
-                {/* Subtitle */}
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                  }}
-                >
-                  Просто выпускается
-                </Typography>
-              </Box>
-
-              {/* Second item */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: "11px" }}>
-                {/* Icon */}
-                <Box
-                  sx={{
-                    backgroundColor: "secondary.light",
-                    borderRadius: "50%",
-                    width: "32px",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <svg
-                    width="14"
-                    height="18"
-                    viewBox="0 0 14 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.00065 0.666992C1.55862 0.666992 1.1347 0.842587 0.82214 1.15515C0.509579 1.46771 0.333984 1.89163 0.333984 2.33366V15.667C0.333984 16.109 0.509579 16.5329 0.82214 16.8455C1.1347 17.1581 1.55862 17.3337 2.00065 17.3337H12.0007C12.4427 17.3337 12.8666 17.1581 13.1792 16.8455C13.4917 16.5329 13.6673 16.109 13.6673 15.667V2.33366C13.6673 1.89163 13.4917 1.46771 13.1792 1.15515C12.8666 0.842587 12.4427 0.666992 12.0007 0.666992H2.00065ZM7.00065 3.16699C8.10572 3.16699 9.16553 3.60598 9.94693 4.38738C10.7283 5.16878 11.1673 6.22859 11.1673 7.33366C11.1673 8.43873 10.7283 9.49854 9.94693 10.2799C9.16553 11.0613 8.10572 11.5003 7.00065 11.5003C5.89558 11.5003 4.83577 11.0613 4.05437 10.2799C3.27297 9.49854 2.83398 8.43873 2.83398 7.33366C2.83398 6.22859 3.27297 5.16878 4.05437 4.38738C4.83577 3.60598 5.89558 3.16699 7.00065 3.16699ZM7.00065 4.00033C6.65898 4.51699 6.37565 5.07533 6.20065 5.66699H7.80065C7.62169 5.07344 7.35182 4.51122 7.00065 4.00033ZM5.91732 4.18366C5.15065 4.44199 4.50065 4.97533 4.11732 5.66699H5.33398C5.48398 5.15033 5.66732 4.65033 5.91732 4.18366ZM8.07565 4.18366C8.32565 4.65033 8.51732 5.15033 8.66732 5.66699H9.88398C9.50065 4.97533 8.84232 4.45033 8.07565 4.18366ZM3.77565 6.50033C3.70898 6.76699 3.66732 7.04199 3.66732 7.33366C3.66732 7.62533 3.70898 7.90033 3.77565 8.16699H5.18398C5.15065 7.89199 5.12565 7.61699 5.12565 7.33366C5.12565 7.05033 5.15065 6.77533 5.18398 6.50033H3.77565ZM6.02565 6.50033C5.98398 6.76699 5.95898 7.05033 5.95898 7.33366C5.95898 7.61699 5.98398 7.89199 6.02565 8.16699H7.97565C8.00898 7.89199 8.04232 7.61699 8.04232 7.33366C8.04232 7.05033 8.00898 6.76699 7.97565 6.50033H6.02565ZM8.81732 6.50033C8.85065 6.77533 8.87565 7.05033 8.87565 7.33366C8.87565 7.61699 8.85065 7.89199 8.81732 8.16699H10.2257C10.2923 7.90033 10.334 7.62533 10.334 7.33366C10.334 7.04199 10.2923 6.76699 10.2257 6.50033H8.81732ZM4.11732 9.00033C4.50065 9.69199 5.15065 10.217 5.91732 10.4837C5.66732 10.017 5.48398 9.52533 5.33398 9.00033H4.11732ZM6.20065 9.00033C6.37565 9.60033 6.65898 10.1503 7.00065 10.667C7.35065 10.1503 7.62565 9.60033 7.80065 9.00033H6.20065ZM8.66732 9.00033C8.51732 9.52533 8.32565 10.017 8.07565 10.4837C8.84232 10.217 9.50065 9.69199 9.88398 9.00033H8.66732ZM2.83398 13.167H11.1673V14.8337H2.83398V13.167Z"
-                      fill="#3377FF"
-                    />
-                  </svg>
-                </Box>
-                {/* Subtitle */}
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                  }}
-                >
-                  Доступна без визы
-                </Typography>
-              </Box>
-
-              {/* Third item */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: "11px" }}>
-                {/* Icon */}
-                <Box
-                  sx={{
-                    backgroundColor: "secondary.light",
-                    borderRadius: "50%",
-                    width: "32px",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12.41 5.19438C13.8248 5.19438 15 4.01914 15 2.59735C15 1.17492 13.8321 0 12.41 0C10.9803 0 9.81275 1.17524 9.81275 2.59735C9.81275 4.01946 10.9803 5.19438 12.41 5.19438ZM3.9967 14.9997H9.63328C10.9056 14.9997 11.9834 14.8799 12.747 14.1167C13.5105 13.3534 13.6226 12.2902 13.6226 11.0102V5.99566C13.2346 6.13956 12.8239 6.2131 12.41 6.21282C10.4192 6.21282 8.78731 4.58089 8.78731 2.59767C8.78731 2.17101 8.86236 1.75903 9.00447 1.38506H3.97435C2.71673 1.38506 1.63892 1.50482 0.875665 2.26809C0.112412 3.03136 0 4.10185 0 5.35183V11.0109C0 12.2906 0.112093 13.3534 0.875665 14.117C1.63892 14.8802 2.71673 14.9997 3.9967 14.9997Z"
-                      fill="#3377FF"
-                    />
-                  </svg>
-                </Box>
-                {/* Subtitle */}
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                  }}
-                >
-                  Нет пластика
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Price and Deadline */}
-            <Box
-              sx={{ display: "flex", gap: "32px", alignItems: "flex-start" }}
-            >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    lineHeight: "100%",
-                    color: "text.primary",
-                  }}
-                >
-                  {formatNumber(
-                    (cardsData?.cards[1]?.final_price || 0).toString()
-                  )}
-                  ₽
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                    color: "text.primary",
-                    opacity: 0.5,
-                    pt: 0.25,
-                  }}
-                >
-                  стоимость
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    lineHeight: "100%",
-                    color: "text.primary",
-                  }}
-                >
-                  {cardsData?.cards[1].issue_days}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                    color: "text.primary",
-                    opacity: 0.5,
-                    pt: 0.25,
-                  }}
-                >
-                  сроки открытия
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Button */}
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Button
-                onClick={() =>
-                  navigate("/foreign-card/apply", {
-                    state: { card: "alfa-card" },
                   })
                 }
               >
