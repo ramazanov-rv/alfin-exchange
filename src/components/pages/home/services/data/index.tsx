@@ -21,7 +21,7 @@ export const services: Service[] = [
     icon: <PaymentsRounded sx={{ width: "20px" }} color="primary" />,
     title: "Оплата инвойсов/Swift перевод",
     description: "Лиры, тенге, дирхамы, евро",
-    link: "https://t.me/alfin_manager?text=Хочу оплатить инвойс/перевод Swift",
+    link: "https://t.me/alfin_manager?text=Хочу оплатить инвой или сделать перевод Swift",
   },
   {
     icon: <PersonPinCircleRounded sx={{ width: "20px" }} color="primary" />,
