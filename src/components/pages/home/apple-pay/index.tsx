@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { Block, Button } from "../../../shared/";
 
 export function ApplePayBlock() {
+  const supportUrl = `https://t.me/alfin_manager?text=Хочу привязать карту к Apple Pay/Google Pay`;
   return (
     <Block
       sx={{
@@ -50,9 +51,7 @@ export function ApplePayBlock() {
 
         <Button
           onClick={() => {
-            const url = `https://t.me/alfin_manager?text=Хочу привязать карту к Apple Pay/Google pay`;
-
-            Telegram.WebApp.openTelegramLink(url);
+            Telegram.WebApp.openTelegramLink(supportUrl);
           }}
         >
           Арендовать карту

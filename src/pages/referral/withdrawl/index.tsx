@@ -111,7 +111,7 @@ export function WithdrawlPage() {
                   "& fieldset": { border: "none" },
                 }}
                 {...register("amount", {
-                  required: "Обязательно для ввода",
+                  required: "Обязательно *",
                   validate: (value) => {
                     const numValue = Number(value);
                     if (isNaN(numValue)) return "Введите корректное число";
@@ -149,7 +149,7 @@ export function WithdrawlPage() {
                   "& fieldset": { border: "none" },
                 }}
                 {...register("wallet", {
-                  required: "Обязательно для ввода",
+                  required: "Обязательно *",
                 })}
                 error={!!errors.wallet}
                 helperText={errors.wallet?.message}
