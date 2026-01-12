@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export function SwiftBlock() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const supportUrl = `https://t.me/alfin_manager?text=Хочу оплатить инвойс/перевод Swift`;
+  const supportUrl = `https://t.me/alfin_manager?text=Хочу оплатить инвой или сделать перевод Swift`;
   return (
     <Block sx={{ position: "relative", overflow: "hidden" }}>
       <Box

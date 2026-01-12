@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { Block, Button } from "../../../shared/";
 
 export function ApplePayBlock() {
-  const supportUrl = `https://t.me/alfin_manager?text=Хочу привязать карту к Apple Pay/Google Pay`;
+  const supportUrl = `https://t.me/alfin_manager?text=Хочу привязать карту к Apple Pay или Google Pay`;
   return (
     <Block
       sx={{
