@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 export function SwiftBlock() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const supportUrl = `https://t.me/alfin_manager?text=Хочу оплатить инвой или сделать перевод Swift`;
   return (
     <Block sx={{ position: "relative", overflow: "hidden" }}>
       <Box
@@ -56,8 +57,8 @@ export function SwiftBlock() {
           </Typography>
           <Box sx={{ mt: "1.25rem" }}>
             <Button
-              disabled
-              // onClick={() => navigate("/aml")}
+              disableGlassEffect
+              onClick={() => Telegram.WebApp.openTelegramLink(supportUrl)}
               sx={{
                 bgcolor: theme.palette.mode === "dark" ? "#3C3C3F" : "#e0e0e0",
                 color: theme.palette.mode === "dark" ? "#fff" : "#000",
@@ -73,7 +74,7 @@ export function SwiftBlock() {
                 },
               }}
             >
-              Скоро...
+              Оплатить
             </Button>
           </Box>
         </Box>

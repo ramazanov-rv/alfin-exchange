@@ -28,7 +28,7 @@ export function ForeignCardBlock() {
         >
           <Box
             component="img"
-            src="/card-block.png"
+            src="/ffcard.png"
             sx={{
               objectFit: "contain",
               height: "40px",
