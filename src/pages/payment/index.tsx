@@ -25,6 +25,7 @@ import { fetchExchangeRate } from "../../services/exchange-rate";
 import { useTelegram } from "../../hooks";
 import { ScheduleInfoBlock } from "../../components/shared/ScheduleInfoBlock";
 import { getCashCities } from "../../services/orders/cash-cities";
+import { getUserInfo } from "../../services/me";
 
 type FormData = {
   name: string;
@@ -160,7 +161,17 @@ export function PaymentForm() {
   }, [tg, handleBackButton]);
 
   const { state } = useLocation();
-  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+  
+  const { data: userInfoData } = useQuery({
+    queryFn: getUserInfo,
+    queryKey: ["user-info"],
+    refetchOnWindowFocus: false,
+    onSuccess(data) {
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    },
+  });
+
+  const userInfo = userInfoData || JSON.parse(localStorage.getItem("userInfo") || "{}");
 
   const userPhone = userInfo.phone_number;
   const userName = [userInfo.first_name, userInfo.last_name]
@@ -203,6 +214,12 @@ export function PaymentForm() {
       comment: "",
     },
   });
+
+  useEffect(() => {
+    if (userName) {
+      setValue("name", userName);
+    }
+  }, [userName, setValue]);
 
   const { mutate: createOrderMutation, isLoading } = useMutation({
     mutationFn: CreateOrder,
