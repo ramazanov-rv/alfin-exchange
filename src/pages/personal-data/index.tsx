@@ -123,7 +123,7 @@ export function PersonalDataForm() {
                   "& fieldset": { border: "none" },
                 }}
                 {...register("first_name", {
-                  required: "Обязятельно *",
+                  required: "Обязательное поле *",
                 })}
                 error={!!errors.first_name}
                 helperText={errors.first_name?.message}
@@ -151,7 +151,7 @@ export function PersonalDataForm() {
                   "& fieldset": { border: "none" },
                 }}
                 {...register("last_name", {
-                  required: "Обязятельно *",
+                  required: "Обязательное поле *",
                 })}
                 error={!!errors.last_name}
                 helperText={errors.last_name?.message}
