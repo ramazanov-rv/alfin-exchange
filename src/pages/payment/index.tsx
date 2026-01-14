@@ -448,7 +448,7 @@ export function PaymentForm() {
                   },
                   "& fieldset": { border: "none" },
                 }}
-                {...register("name", { required: "Обязятельно *" })}
+                {...register("name", { required: "Обязательно *" })}
                 error={!!errors.name}
                 slotProps={{
                   htmlInput: {
